@@ -66,11 +66,15 @@ def get_timeseries_data(bars_count):
 
 @app.route('/t/<tablename>/')
 def show_table(tablename):
-    query = 'select from {}'.format(tablename)
+    query = '0!select from {}'.format(tablename)
     
     print(query)
-    x = q(query)
+    x = q(query)    
     print(type(x))
+    print(x)
+    
+    x = pd.DataFrame(x)
+    print('xxxx convert to pandas dataframe')
     print(x)
     
     return render_template("show_table.html", name=tablename, data=x)
