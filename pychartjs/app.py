@@ -15,6 +15,17 @@ q.open()
 #print(q)
 print('IPC version: %s. Is connected: %s' % (q.protocol_version, q.is_connected()))
 
+winners = [{"name": "Turkey", "category": "TUR"},
+{"name": "China", "category": "CNY"},
+{"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:5000/20/"},
+{"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:5000/t/trade/"},
+]
+
+@app.route("/")
+def index():
+    return render_template("index.html", heading="George's test page - ", winners=winners)
+
+
 @app.route("/<int:bars_count>/")
 def chart(bars_count):
     if bars_count <= 0:
