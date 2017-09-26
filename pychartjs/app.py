@@ -1,11 +1,14 @@
 from flask import Flask
 from flask import render_template
+
 from datetime import time
 from qpython import qconnection
 
 import pandas as pd
 import numpy as np
 
+import json
+from flask import jsonify
 
 app = Flask(__name__)
 
@@ -15,11 +18,21 @@ q.open()
 #print(q)
 print('IPC version: %s. Is connected: %s' % (q.protocol_version, q.is_connected()))
 
-winners = [{"name": "Turkey", "category": "TUR"},
-{"name": "China", "category": "CNY"},
-{"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:5000/20/"},
-{"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:5000/t/trade/"},
+winners = [
+    {'name': 'Albert Einstein', 'category':'Physics'},
+    {'name': 'V.S. Naipaul', 'category':'Literature'},
+    {'name': 'Dorothy Hodgkin', 'category':'Chemistry'},
+    {"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:5000/20/"},
+    {"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:5000/t/trade/"},
 ]
+
+trade = [
+{"id":1, "ts":100, "tp":80.88, "time":559674712891},
+{"id":2, "ts":104, "tp":81.88, "time":559674712891},
+{"id":3, "ts":103, "tp":82.88, "time":559674712891},
+{"id":4, "ts":102, "tp":83.88, "time":559674712891},
+]
+
 
 @app.route("/")
 def index():
@@ -78,18 +91,35 @@ def get_timeseries_data(bars_count):
 @app.route('/t/<tablename>/')
 def show_table(tablename):
     query = '0!select from {}'.format(tablename)
+    x = q(query)    
     
     print(query)
-    x = q(query)    
     print(type(x))
     print(x)
     
     x = pd.DataFrame(x)
     print('xxxx convert to pandas dataframe')
+    x['time'] = pd.to_datetime(x.time)    
+    print(type(x))
     print(x)
     
     return render_template("show_table.html", name=tablename, data=x)
 
+
+@app.route('/<tablename>/json')
+def table_json(tablename):
+    query = '0!select from {}'.format(tablename)
+    
+    x = q(query)        
+    df = pd.DataFrame(x)
+    print('xxxx convert to pandas dataframe -> to_json()')
+    df['time'] = pd.to_datetime(df.time)    
+    print(type(df.to_json()))
+    print(df.to_json())
+    
+    #return df.to_json()
+    return jsonify(trade)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)

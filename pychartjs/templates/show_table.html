@@ -1,5 +1,47 @@
 {% extends "layout.html" %}
+
 {% block body %}
-<h1>{{name}}</h1>
+
+<h1>df.to_html(): {{name}}</h1>
+
 {{ data.to_html(classes="table table-striped") | safe}}
+
+<h2>Selected winners D3 - id="nobel-list"</h2>
+<h3>header: {{ data.columns }}</h3>
+<h5>data.json: {{ data.to_json() }}</h5>  
+
+
+<style>
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+</style>
+
+  
+<div id="nobel-list">
+  <table class="table">
+    <thead>
+	  <tr>
+	    <th id='id'>id</th>
+	    <th id='ts'>ts</th>
+	    <th id='tp'>tp</th>
+	    <th id='time'>time</th>
+	  </tr>
+    </thead>
+		
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+<div id="mytest"></div>
+
+<script src="../../static/app2.js"></script>
+
 {% endblock %}
