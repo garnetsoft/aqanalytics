@@ -1,5 +1,5 @@
 
-console.log('running app.js ...');
+console.log('running app.js test...');
 
 d3.json("/trade/json", function(data) {
 	

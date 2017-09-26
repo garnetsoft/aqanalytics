@@ -22,8 +22,8 @@ winners = [
     {'name': 'Albert Einstein', 'category':'Physics'},
     {'name': 'V.S. Naipaul', 'category':'Literature'},
     {'name': 'Dorothy Hodgkin', 'category':'Chemistry'},
-    {"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:5000/20/"},
-    {"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:5000/t/trade/"},
+    {"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:8000/20/"},
+    {"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:8000/t/trade/"},
 ]
 
 trade = [
@@ -109,17 +109,19 @@ def show_table(tablename):
 @app.route('/<tablename>/json')
 def table_json(tablename):
     query = '0!select from {}'.format(tablename)
+    query = '-20#select from trades'
     
     x = q(query)        
     df = pd.DataFrame(x)
     print('xxxx convert to pandas dataframe -> to_json()')
     df['time'] = pd.to_datetime(df.time)    
     print(type(df.to_json()))
-    print(df.to_json())
+    print(df.to_json(orient='records'))
     
-    #return df.to_json()
-    return jsonify(trade)
+    #return df.to_json(orient='records')
+    #return jsonify(trade)
+    return df.to_json(orient='table')
     
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=8000, debug=True)

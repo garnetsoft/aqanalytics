@@ -6,10 +6,11 @@
 
 {{ data.to_html(classes="table table-striped") | safe}}
 
-<h2>Selected winners D3 - id="nobel-list"</h2>
 <h3>header: {{ data.columns }}</h3>
-<h5>data.json: {{ data.to_json() }}</h5>  
-
+<h5>data.json columns: {{ data.to_json() }}</h5>  
+<h5>data.json records : {{ data.to_json(orient='records') }}</h5>
+<h5>data.json index : {{ data.to_json(orient='index') }}</h5>
+<h5>data.json table : {{ data.to_json(orient='table') }}</h5>
 
 <style>
 .chart rect {
@@ -21,20 +22,33 @@
   font: 10px sans-serif;
   text-anchor: middle;
 }
+
+/* WINNERS LIST */
+#nobel-list{
+    overflow:scroll;
+    overflow-x:hidden;
+}
+
+#nobel-list table { font-size:10px; }
+
+#nobel-list table th#year {width:30px}
+#nobel-list table th#category {width:120px}
+#nobel-list table th#name {width:120px}
+#nobel-list h2 {font-size:14px; margin:4px; text-align:center}
+#nobel-list tr:hover{
+    cursor: pointer;
+    background:lightblue;
+}
+#nobel-list tr { opacity: 1}
+
 </style>
 
+<h2>Selected winners D3 - id="nobel-list"</h2>
   
 <div id="nobel-list">
   <table class="table">
     <thead>
-	  <tr>
-	    <th id='id'>id</th>
-	    <th id='ts'>ts</th>
-	    <th id='tp'>tp</th>
-	    <th id='time'>time</th>
-	  </tr>
     </thead>
-		
     <tbody>
     </tbody>
   </table>
