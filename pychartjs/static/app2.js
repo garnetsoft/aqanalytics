@@ -1,7 +1,25 @@
 
 console.log('running app2.js ...');
 
-d3.json("/trade/json", function(table) {
+// Global parameters:
+// do not resize the chart canvas when its container does (keep at 600x400px)
+Chart.defaults.global.responsive = false;
+
+var timeFormat = 'hh:mm:ss';
+
+function newDateString(hours, minutes, seconds) {
+	return moment().hour(hours).minute(minutes).second(seconds).format(timeFormat);
+}
+
+
+// this is actually a Ajax call
+d3.json("/trade/json", function(error, table) {
+	
+	if (error) {
+		console.log('xxxx ERROR: ');
+		console.log(error);
+		return;
+	}
 
 	console.log('hahaha table:');
 	console.log(table);
@@ -96,5 +114,101 @@ d3.json("/trade/json", function(table) {
         // nbviz.displayWinner(data[Math.floor(Math.random() * data.length)]);
     	console.log('xxx got data.length: ' + data.length);
     }
+    
+    // prepare dataset for chart: labels, prices, lengend
+    console.log('xxxx charts data:');
+    console.log(data);
+    
+    var prices= [], times =[], labels = [];
+    
+	for (var i = 0; i < data.length; i++) {
+		var d = data[i];
+		var t = d.time;
+		prices[i] = d.tp;
+		// times[i] = t;
+		times[i] = moment(t).format('HH:mm:ss')
+	}
+	
+	console.log(prices);
+	console.log(times);
+	
+    // define the chart data
+    var chartData = {
+      labels : times,
+      datasets : [{
+          label: 'My Price Chart2',
+          fill: true,
+          lineTension: 0.1,
+          backgroundColor: "rgba(75,192,192,0.4)",
+          borderColor: "rgba(75,192,192,1)",
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: "rgba(75,192,192,1)",
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(75,192,192,1)",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data : prices,
+          spanGaps: false
+      }]
+    };
+    
+
+    // get chart canvas
+    var holder = document.getElementById("myChart2");
+    var ctx = document.getElementById("myChart2").getContext("2d");
+
+    // create a callback function for updating the caption
+    var original = Chart.defaults.global.legend.onClick;
+    Chart.defaults.global.legend.onClick = function(e, legendItem) {
+      update_caption(legendItem);
+      original.call(this, e, legendItem);
+    };
+    
+    // create the chart using the chart canvas
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: chartData,
+      options: {
+        tooltips: {
+          enabled: true,
+          mode: 'single',
+          callbacks: {
+            label: function(tooltipItems, data) {
+                     firstPointCtx = "First Point Selected: ";
+                     return tooltipItems.yLabel;
+                   }
+          }
+        },
+      }
+    });
+
+    // get the text element below the chart
+    var pointSelected = document.getElementById("pointSelected");
+
+    // create a callback function for updating the selected index on the chart
+    holder.onclick = function(evt){
+      var activePoint = myChart.getElementAtEvent(evt);
+      console.log(evt);
+      console.log(activePoint);
+      
+      if (Object.keys(activePoint).length > 0) {
+	        console.log('x:' + activePoint[0]._view.x);
+	        console.log('maxWidth: ' + activePoint[0]._xScale.maxWidth);
+	        console.log('y: ' + activePoint[0]._view.y);
+	        console.log('index: ' + activePoint[0]._index);
+	        var index = activePoint[0]._index;
+	        
+	        //console.log('haha: ' + {{labels}})
+	        //pointSelected.innerHTML = 'Price selected... index: ' + activePoint[0]._index +', px=' + {{ prices }}[activePoint[0]._index];
+	        pointSelected.innerHTML = 'Price selected: ' + prices[index];
+    	}
+    };
     
 });

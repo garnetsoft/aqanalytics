@@ -6,8 +6,8 @@
 
 {{ data.to_html(classes="table table-striped") | safe}}
 
-<h3>header: {{ data.columns }}</h3>
-<h5>data.json columns: {{ data.to_json() }}</h5>  
+<h3>columns: {{ data.columns }}</h3>
+<h5>data.json default: {{ data.to_json() }}</h5>  
 <h5>data.json records : {{ data.to_json(orient='records') }}</h5>
 <h5>data.json index : {{ data.to_json(orient='index') }}</h5>
 <h5>data.json table : {{ data.to_json(orient='table') }}</h5>
@@ -43,6 +43,14 @@
 
 </style>
 
+
+<h2>AQ Chart #1</h2>    
+<p id="pointSelected">Price selected: {{ data.size }} </p>
+
+<!-- bar chart canvas element -->
+<canvas id="myChart2" width="600" height="400"></canvas>
+
+    
 <h2>Selected winners D3 - id="nobel-list"</h2>
   
 <div id="nobel-list">
@@ -54,7 +62,7 @@
   </table>
 </div>
 
-<div id="mytest"></div>
+<div id="myplot"></div>
 
 <script src="../../static/app2.js"></script>
 

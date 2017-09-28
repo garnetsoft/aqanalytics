@@ -36,7 +36,7 @@ trade = [
 
 @app.route("/")
 def index():
-    return render_template("index.html", heading="George's test page - ", winners=winners)
+    return render_template("index.html", heading="George's test page - Menu", winners=winners)
 
 
 @app.route("/<int:bars_count>/")
@@ -109,7 +109,7 @@ def show_table(tablename):
 @app.route('/<tablename>/json')
 def table_json(tablename):
     query = '0!select from {}'.format(tablename)
-    query = '-20#select from trades'
+    query = '-50#select from trades where id=0'
     
     x = q(query)        
     df = pd.DataFrame(x)
