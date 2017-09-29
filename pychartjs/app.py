@@ -12,6 +12,8 @@ from flask import jsonify
 
 app = Flask(__name__)
 
+PORT = 8080
+
 q = qconnection.QConnection(host='localhost', port=5001, pandas=False)
 # initialize connection
 q.open()
@@ -22,8 +24,8 @@ winners = [
     {'name': 'Albert Einstein', 'category':'Physics'},
     {'name': 'V.S. Naipaul', 'category':'Literature'},
     {'name': 'Dorothy Hodgkin', 'category':'Chemistry'},
-    {"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:8000/20/"},
-    {"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:8000/t/trade/"},
+    {"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:8080/20/"},
+    {"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:8080/t/trade/"},
 ]
 
 trade = [
@@ -108,8 +110,8 @@ def show_table(tablename):
 
 @app.route('/<tablename>/json')
 def table_json(tablename):
-    query = '0!select from {}'.format(tablename)
-    query = '-50#select from trades where id=0'
+    query = '0!select from {} where id=0'.format(tablename)
+    query = '-1440#select from trades where id=0'
     
     x = q(query)        
     df = pd.DataFrame(x)
@@ -124,4 +126,4 @@ def table_json(tablename):
     
 
 if __name__ == "__main__":
-    app.run(port=8000, debug=True)
+    app.run(port=PORT, debug=True)

@@ -2,15 +2,15 @@
 
 {% block body %}
 
+<!-- 
 <h1>df.to_html(): {{name}}</h1>
-
 {{ data.to_html(classes="table table-striped") | safe}}
-
 <h3>columns: {{ data.columns }}</h3>
 <h5>data.json default: {{ data.to_json() }}</h5>  
 <h5>data.json records : {{ data.to_json(orient='records') }}</h5>
 <h5>data.json index : {{ data.to_json(orient='index') }}</h5>
 <h5>data.json table : {{ data.to_json(orient='table') }}</h5>
+-->
 
 <style>
 .chart rect {
@@ -43,6 +43,7 @@
 
 </style>
 
+<div id="container" style="height: 400px; min-width: 310px"></div>
 
 <h2>AQ Chart #1</h2>    
 <p id="pointSelected">Price selected: {{ data.size }} </p>

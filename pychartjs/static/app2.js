@@ -120,6 +120,7 @@ d3.json("/trade/json", function(error, table) {
     console.log(data);
     
     var prices= [], times =[], labels = [];
+    var ohlc = [], volume = [];
     
 	for (var i = 0; i < data.length; i++) {
 		var d = data[i];
@@ -127,6 +128,11 @@ d3.json("/trade/json", function(error, table) {
 		prices[i] = d.tp;
 		// times[i] = t;
 		times[i] = moment(t).format('HH:mm:ss')
+		
+		// data2[i] = [moment(t).toDate().getTime(), d.tp];
+		ohlc.push([moment(t).toDate().getTime(), d.tp]);
+		volume.push([moment(t).toDate().getTime(), d.ts]);
+		
 	}
 	
 	console.log(prices);
@@ -211,4 +217,89 @@ d3.json("/trade/json", function(error, table) {
     	}
     };
     
+    
+    // draw highchart
+    //$.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data2) {
+    
+    	// set the allowed units for data grouping
+    	groupingUnits = [[
+        'week',                         // unit name
+        [1]                             // allowed multiples
+        ], [
+        'month',
+        [1, 2, 3, 4, 6]
+        ]],
+
+        // Create the chart
+        Highcharts.stockChart('container', {
+
+            rangeSelector: {
+                buttons: [{
+                    type: 'hour',
+                    count: 1,
+                    text: '1h'
+                }, {
+                    type: 'day',
+                    count: 1,
+                    text: '1D'
+                }, {
+                    type: 'all',
+                    count: 1,
+                    text: 'All'
+                }],
+                selected: 1,
+                inputEnabled: false
+            },
+
+            title: {
+                text: 'AAPL Stock Price'
+            },
+
+            yAxis: [{
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'Price'
+                },
+                height: '60%',
+                lineWidth: 2
+            }, {
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'Volume'
+                },
+                top: '65%',
+                height: '35%',
+                offset: 0,
+                lineWidth: 2
+            }],
+
+            tooltip: {
+                split: true
+            },
+            
+            series: [{
+                name: 'AAPL',
+                data: ohlc,
+                tooltip: {
+                    valueDecimals: 2
+                }
+            }, {
+                type: 'column',
+                name: 'Volume',
+                data: volume,
+                yAxis: 1,
+                //dataGrouping: {
+                //    units: groupingUnits
+                //}
+            }]
+        });
+    //});
+    
 });
+
