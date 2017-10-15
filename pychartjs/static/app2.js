@@ -221,6 +221,11 @@ d3.json("/trade/json", function(error, table) {
     // draw highchart
     //$.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data2) {
     
+    console.log("xxxx ohlc:");
+    console.log(ohlc);
+    console.log("xxxx volume:");
+    console.log(volume);
+    
     	// set the allowed units for data grouping
     	groupingUnits = [[
         'week',                         // unit name
@@ -248,7 +253,7 @@ d3.json("/trade/json", function(error, table) {
                     text: 'All'
                 }],
                 selected: 1,
-                inputEnabled: false
+                inputEnabled: true
             },
 
             title: {

@@ -5,47 +5,47 @@
     <title>Agile Data Science</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Bootstrap example in Agile Data Science, 2.0">
-    <meta name="author" content="Russell Jurney">
-    <link href="/static/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/bootstrap-theme.min.css" rel="stylesheet">
+    <meta name="author" content="George Feng">
+
+    <link href="../static/css/style.css" rel="stylesheet">
+
+    <script src="../static/jquery-1.12.2.min.js"></script>
+    <script src="../static/bootstrap.min.js"></script>
+    <script src="../static/d3.v3.min.js"></script>    
+    
+    <script src="https://unpkg.com/vue@2.4.4/dist/vue.js"></script>
   </head>
-
   <body>
-    <div id="wrap">
 
-      <!-- Begin page content -->
-      <div class="container">
-        <div class="page-header">
-          <h1>Agile Data Science</h1>
-        </div>
-        <p class="lead">Executives</p>
-        
-        <table class="table">
-          <thead>
-              <th>Name</th>
-              <th>Company</th>
-              <th>Title</th>
-          </thead>
-          <tbody>
-            {% for executive in executives -%}
-            <tr>
-              <td>{{executive.name}}</td>
-              <td>{{executive.company}}</td>
-              <td>{{executive.title}}</td>
-            </tr>
-            {% endfor -%}
-          </tbody>
-        </table>
-      </div>
+<div id="root">
+<input type="text" id="input" v-model="msg2">
+<p>The value of the input is: [[msg2]].</p>
+<ul>
+  <li v-for="name in names" v-text="name"></li>  
+  <li v-for="name in names">2: [[name]]</li>  
+</ul>
 
-      <div id="push"></div>
-    </div>
+foo: [[foo]] 
+name: [[name]]
+</div>
 
-    <div id="footer">
-      <div class="container">
-        <p class="muted credit"><a href="http://shop.oreilly.com/product/0636920025054.do">Agile Data Science</a> by <a href="http://www.linkedin.com/in/russelljurney">Russell Jurney</a>, 2016
-      </div>
-    </div>
-    <script src="/static/bootstrap.min.js"></script>
+<script>
+console.log('testing VueJS ...')
+
+var app = new Vue({
+	el: '#root',
+	delimiters: ["[[", "]]"],
+	
+	data: {		
+		message: 'hahah message ',
+		msg2: 'another message',
+		foo: 'bar',
+		name: 'george',
+		names: ['joe', 'ed', 'george' ]
+	}
+	
+})
+</script>
+
   </body>
 </html>

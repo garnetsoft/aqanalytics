@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, request
 
 from datetime import time
 from qpython import qconnection
@@ -10,6 +10,20 @@ import numpy as np
 import json
 from flask import jsonify
 
+
+class CustomFlask(Flask):
+    jinja_options = Flask.jinja_options.copy()
+    jinja_options.update(dict(
+    block_start_string='$$',
+    block_end_string='$$',
+    variable_start_string='$',
+    variable_end_string='$',
+    comment_start_string='$#',
+    comment_end_string='#$',
+))
+
+
+#app = CustomFlask(__name__)
 app = Flask(__name__)
 
 PORT = 8080
@@ -26,13 +40,14 @@ winners = [
     {'name': 'Dorothy Hodgkin', 'category':'Chemistry'},
     {"name": "./<int:bars_count/", "category": "shows number of ticks in chart", "url": "http://localhost:8080/20/"},
     {"name": "./t/tablename/", "category": "display a table in html", "url": "http://localhost:8080/t/trade/"},
+    {"name": "VueJS", "category": "Visualization", "url": "http://localhost:8080/vuejs"},
 ]
 
 trade = [
-{"id":1, "ts":100, "tp":80.88, "time":559674712891},
-{"id":2, "ts":104, "tp":81.88, "time":559674712891},
-{"id":3, "ts":103, "tp":82.88, "time":559674712891},
-{"id":4, "ts":102, "tp":83.88, "time":559674712891},
+    {"id":1, "ts":100, "tp":80.88, "time":559674712891},
+    {"id":2, "ts":104, "tp":81.88, "time":559674712891},
+    {"id":3, "ts":103, "tp":82.88, "time":559674712891},
+    {"id":4, "ts":102, "tp":83.88, "time":559674712891},
 ]
 
 
@@ -108,7 +123,7 @@ def show_table(tablename):
     return render_template("show_table.html", name=tablename, data=x)
 
 
-@app.route('/<tablename>/json')
+@app.route('/<tablename>/json/')
 def table_json(tablename):
     query = '0!select from {} where id=0'.format(tablename)
     query = '-1440#select from trades where id=0'
@@ -118,12 +133,27 @@ def table_json(tablename):
     print('xxxx convert to pandas dataframe -> to_json()')
     df['time'] = pd.to_datetime(df.time)    
     print(type(df.to_json()))
-    print(df.to_json(orient='records'))
+    #print(df.to_json(orient='records'))
     
     #return df.to_json(orient='records')
     #return jsonify(trade)
     return df.to_json(orient='table')
-    
 
+    
+@app.route('/vuejs/')
+def vuejs_test():
+    #query = '0!select from {} where id=0'.format('trade')
+    query = 'select name, power:tp from (0!trade lj `id xkey  smTbl)'
+    
+    x = q(query)        
+    df = pd.DataFrame(x)
+    print(list(df))
+    dfJson = json.dumps(list(df))
+    print(dfJson)
+    
+    #return render_template('table2.html', data=df.to_json(orient='records'), who=' from Flask2: george feng', dfCols='["name", "power", "hehe"]' )
+    return render_template('table2.html', data=df.to_json(orient='records'), who=' from Flask2: george feng', dfColsList=list(df), dfCols=dfJson)
+    
+    
 if __name__ == "__main__":
     app.run(port=PORT, debug=True)
