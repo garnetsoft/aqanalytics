@@ -56,11 +56,11 @@
 
   <p>George's testing from Vue: [[ lname ]], [[ fname ]]</p>
   <p>Who: {{ who }}</p>
-
   <p>flaskName: {{ who }}</p>
-  <p>dfColsList: {{ dfColsList|safe }}</p>
-  <p>dfColsJson: {{ dfCols|safe }}</p>
-  <p>dataJson: {{ data|safe }}</p>
+  
+  <p>dfColsList: {{ dfColsList }}</p>
+  <p>dfColsJson: {{ dfCols }}</p>
+  <p>dataJson: {{ data }}</p>
 
   <p>vueCols: [[ gridColumns ]]</p>
   <p>vueData: [[ gridData ]]</p>
@@ -69,10 +69,12 @@
 
 <script type="text/JavaScript"> 
    var vueColsList = "{{ dfColsList }}" 
-
    var flaskName2 = "{{ who }}" 
-   var vueCols = "{{ dfCols }}" 
-   var vueData = "{{ data }}" 
+   
+   var vueCols = JSON.parse('{{ dfCols|safe }}') 
+   // var vueData = "{{ data }}"   
+   var vueData = JSON.parse('{{ data|safe }}')
+   
  </script>
 
 

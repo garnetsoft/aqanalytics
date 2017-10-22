@@ -61,8 +61,6 @@ Vue.component('demo-grid', {
 })
 
 
-//var flaskName2 = "{{ who }}" 
-
 // bootstrap the demo
 /*
 var demoOld = new Vue({
@@ -85,12 +83,7 @@ var demoOld = new Vue({
 })
 */
 
-
-//var haha =  JSON.parse(vueCols)
-//var hehe =  JSON.parse(vueData)
-console.log('xxxx')
-console.log(flaskName2)
-
+   
 console.log("xxxx vueColsList: ")
 console.log(typeof(vueColsList))
 console.log(vueColsList)
@@ -101,20 +94,17 @@ console.log("xxxx vueData: ")
 console.log(typeof(vueData))
 console.log(vueData)
 
-//console.log(JSON.parse(vueData))
 
 var demo = new Vue({
   el: '#demo',
   delimiters: ["[[", "]]"],
   data: {
     searchQuery: '',
-    gridColumns: JSON.parse('["name", "power"]'),
-    gridColumns: JSON.parse(vueCols+''),
+    
+    // kdb table
+    gridColumns: vueCols,
+    gridData: vueData,
 
-    gridData: [
-      { name: 'Chuck Norris', power: Infinity },
-      { name: 'Bruce Lee', power: 9000 },
-    ],
     fname: 'George',
     lname: 'Feng',
     flaskName2: flaskName2,

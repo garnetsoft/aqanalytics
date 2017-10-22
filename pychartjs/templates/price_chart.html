@@ -107,7 +107,8 @@
       	}
       };
       
-      var dataTable = document.getElementById("dataTable");
+      var dataTable = document.getElementById("dataTable");      
+
       
     </script>
     
@@ -115,5 +116,27 @@
     <p id="tableSize">size: {{ result.size }} </p>
     <p id="dataTable">result: {{ result }} </p>
 
+    <p id="gridData">gridData: {{ data }} </p>
+    <p id="gridData2">DEFAULT</p>
+    
+    <script type="text/javascript">
+    
+		var jsonStr = "{{ data }}";
+		console.log('xxxx jsonStr:');
+		console.log(jsonStr);
+
+    	var data = JSON.parse('{{ data|safe }}');
+    	console.log('xxxxxxxxxx');
+    	console.log(data);
+    	
+    	//var json = JSON.parse(data);
+    	console.log('hehehhe');
+    	console.log(typeof(data));
+    	
+	    var gridData2 = document.getElementById("gridData2");	    
+	    gridData2.innerHTML = data;
+	    
+    </script>
+    
   </body>
 </html>

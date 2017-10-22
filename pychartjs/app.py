@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, request
+from flask import render_template, request, jsonify
 
 from datetime import time
 from qpython import qconnection
@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 
 import json
-from flask import jsonify
 
 
 class CustomFlask(Flask):
@@ -51,6 +50,13 @@ trade = [
 ]
 
 
+jsonData = [
+    { "name": "Bruce Lee", "power": 9000 },
+    { "name": "George feng", "power": 9000 },
+    { "name": "Jet Liiiiiiii", "power": 9000 },
+]
+
+
 @app.route("/")
 def index():
     return render_template("index.html", heading="George's test page - Menu", winners=winners)
@@ -68,7 +74,7 @@ def chart(bars_count):
     print(result.meta)
     header = str(result.meta)
     
-    return render_template('price_chart.html', prices=prices, labels=times, legend=legend, header=header, result=result)
+    return render_template('price_chart.html', prices=prices, labels=times, legend=legend, header=header, result=result, data=json.dumps(jsonData))
 
 
 def get_timeseries_data(bars_count):
@@ -143,16 +149,24 @@ def table_json(tablename):
 @app.route('/vuejs/')
 def vuejs_test():
     #query = '0!select from {} where id=0'.format('trade')
-    query = 'select name, power:tp from (0!trade lj `id xkey  smTbl)'
+    query = '`id`name`tp`ts xcols update time:string time from (0!trade lj `id xkey  smTbl)'
     
     x = q(query)        
     df = pd.DataFrame(x)
-    print(list(df))
+    
+    print('xxxx dataFrame:')
+    print(df)
+    
     dfJson = json.dumps(list(df))
+    print('header json')
     print(dfJson)
     
-    #return render_template('table2.html', data=df.to_json(orient='records'), who=' from Flask2: george feng', dfCols='["name", "power", "hehe"]' )
-    return render_template('table2.html', data=df.to_json(orient='records'), who=' from Flask2: george feng', dfColsList=list(df), dfCols=dfJson)
+    print('data json:')    
+    gridData = df.to_json(orient='records')
+    print(type(gridData))
+    print(gridData)
+    
+    return render_template('table2.html', who=' from Flask2: george feng', dfColsList=list(df), dfCols=dfJson, data=gridData)
     
     
 if __name__ == "__main__":
