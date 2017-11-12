@@ -1,3 +1,8 @@
+Purchase public WIFI: PurchaseGuest 
+captaincrunch
+
+https://github.com/miguelgrinberg/Flask-SocketIO
+
 
 Using Flask with vue.js as a frontend framework
 
@@ -57,4 +62,34 @@ D5D52613 C3D12E98 BC49967F 7652EED2
 E36B85CC 84991F19 7575D828 470A92AB
 —— END LICENSE ——
 
-symTbl:`id`name!(0 1 2 3 4;`IBM`AAPL`MSFT`INTC`GS)
+symTbl:`id`name!(0 1 2 3 4;`IBM`AAPL`MSFT`INTC`GS);
+smTbl:flip symTbl
+
+pivot table:
+
+q)meta t
+c   | t f a
+----| -----
+id  | j   g
+ts  | j
+tp  | f
+time| p
+name| s
+q)
+
+1: sym as columns:
+
+  q)exec (exec distinct name from t)#name!ts by mm:15 xbar time.minute from t
+
+  or 
+  exec `$(exec string asc distinct name from t)#(`$string name)!ts by mm:15 xbar time.minute from t
+
+2. time as columns:
+
+  q) t1:exec vol:sum ts by name, mm:15 xbar time.minute from t
+
+  q) c1:`$exec string asc distinct mm from t1
+
+  q) exec c1#(`$string mm)!vol by sym:name from t1
+
+http://www.matthieuamiguet.ch/blog/synchronize-clients-flask-application-websockets
