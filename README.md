@@ -1,5 +1,33 @@
 # aqanalytics - let the visulization begin ...
 
+
+q)\t 5000 / 5 seconds
+
+q)handle
+h  | active user  host                              address        time
+---| -------------------------------------------------------------------------------------------
+0  | 1      gfeng gfeng01-desk.questpartnersllc.com 192 168 82 113 2017.11.06D05:29:24.452490000
+512| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D03:49:29.804609000
+516| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.06D05:40:07.331931000
+520| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.06D05:40:39.260580000
+540| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.06D08:56:49.331535000
+544| 1            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.08D06:17:12.616904000
+288| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D03:49:29.624821000
+576| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.08D05:32:36.108451000
+568| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.08D06:16:00.928114000
+572| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D04:29:21.397695000
+584| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.08D06:11:18.624633000
+560| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.08D06:17:00.573625000
+592| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D04:30:10.547386000
+564| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D04:48:57.380193000
+596| 1            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D04:49:00.109814000
+548| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D04:47:40.801630000
+528| 0            gfeng01-desk.questpartnersllc.com 127 0   0  1   2017.11.13D04:45:12.657703000
+
+q).z.ts:{[h] -596 (`upd;`trade;value trade)}
+q)
+
+
 $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-ohlcv.json&callback=?', function (data) {
 
     // split the data set into ohlc and volume

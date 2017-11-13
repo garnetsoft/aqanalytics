@@ -9,6 +9,8 @@ from qpython import qconnection
 from qpython.qtype import QException
 from qpython.qconnection import MessageType
 from qpython.qcollection import QDictionary
+from qpython.qcollection import QTable
+
 
 import pandas as pd
 import numpy as np
@@ -40,6 +42,7 @@ def initQ():
 
 def background_thread():
     """Example of how to send server generated events to clients."""
+    print('xxxx starting background_thread...')
     count = 0
     while True:        
         socketio.sleep(5)
@@ -56,6 +59,44 @@ def background_thread():
         socketio.emit('my_response',
                       {'data': json, 'count': count, 'data2': json2},
                       namespace='/test')
+
+
+def background_thread_sub():
+    print('xxxx starting background_thread_sub...')
+    count = 0
+    while True:        
+        try:
+            message = q.receive(data_only = False, raw = False)
+
+            print('xxxx')
+            print(message)
+
+            if message.type != MessageType.ASYNC:
+                print('Unexpected message, expected message type: ASYNC')
+
+            print('type: %s, message type: %s, data size: %s ' % (type(message), message.type, message.size))
+
+            if isinstance(message.data, list):
+                if len(message.data) == 3 and message.data[0] == b'upd' and isinstance(message.data[2], QTable):
+                    #for row in message.data[2]:
+                    #    print(row)
+                    x = message.data[2]
+                    print(x)
+                    df = pd.DataFrame(x)
+                    print(df)
+
+                    json = df.to_json()
+                    json2 = df.to_json(orient='records')
+
+                    count += 1
+                    socketio.emit('my_response',{'data': json, 'count': count, 'data2': json2}, namespace='/test')
+
+
+        except QException as e:
+            print(e)
+            print('xxxx background_thread_sub exiting...')
+            break
+
 
 
 @app.route('/')
@@ -85,13 +126,13 @@ def ping_pong():
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
+    # initQ
+    initQ()
+
     global thread
     with thread_lock:
         if thread is None:
-            thread = socketio.start_background_task(target=background_thread)
-
-    # initQ
-    initQ()
+            thread = socketio.start_background_task(target=background_thread_sub)
 
     emit('my_response', {'data': 'Connected, Q is ready to publish data...', 'count': 0})
 
