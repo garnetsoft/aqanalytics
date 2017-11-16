@@ -1,5 +1,6 @@
 # aqanalytics - let the visulization begin ...
 
+.z.ts:{[h] update updateTime:`$string .z.Z from `trade; (neg last exec h from select from handle where user=`socketio, active=1 )(`upd;`trade;value trade)}
 
 q)\t 5000 / 5 seconds
 

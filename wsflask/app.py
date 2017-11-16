@@ -29,7 +29,7 @@ thread = None
 thread_lock = Lock()
 
 # create connection object
-q = qconnection.QConnection(host = 'localhost', port = 5001, pandas=False)
+q = qconnection.QConnection(host = 'localhost', port = 5001, username='socketio', password='xxxx', pandas=False)
 
 def initQ():
 
@@ -88,8 +88,11 @@ def background_thread_sub():
                     json = df.to_json()
                     json2 = df.to_json(orient='records')
 
+                    table = df.to_json(orient='table')
+                    print(table)
+
                     count += 1
-                    socketio.emit('my_response',{'data': json, 'count': count, 'data2': json2}, namespace='/test')
+                    socketio.emit('my_response',{'data': json, 'count': count, 'data2': json2, 'table': table}, namespace='/test')
 
 
         except QException as e:
