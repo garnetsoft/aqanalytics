@@ -2,6 +2,13 @@
 
 .z.ts:{[h] update updateTime:`$string .z.Z from `trade; (neg last exec h from select from handle where user=`socketio, active=1 )(`upd;`trade;value trade)}
 
+test:{[db;tm] show "test xxxx: ",(string tm) }
+test2:{[id;tm] show "test2 xxxx: ",(string tm); show timer.job }
+
+ .timer.add[`timer.job;`test;(`test;p`db);tm+0D00:00:05]; // fixed time
+ .timer.add[`timer.job;`test2;(`.timer.until;0D00:00:10;p`eod;(`test2;99));tm]; // repeat every 10 sec
+ 
+ 
 q)\t 5000 / 5 seconds
 
 q)handle
